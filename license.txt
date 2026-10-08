@@ -1,17 +1,17 @@
 # ============================================================================
-# Copyright (c) 2025 Thomas Broggini and Liu Xiao. All rights reserved.
+# Copyright (c) 2025 Liu Xiao and Thomas Broggini. All rights reserved.
 #
 # This code was jointly written by:
-# Thomas Broggini (Frankfurt University, Germany)
 # Liu Xiao (Xiangyang First Hospital, China)
+# Thomas Broggini (Frankfurt University, Germany)
 #
 # The way how the mathematical models and methodologies implemented in this code have been
 # individually customized and are not intended for generic use. 
 #
 # For permission requests or inquiries, please contact:
-# Thomas Broggini  : broggini@med.uni-frankfurt.de
 # Liu Xiao         : careyneurosurgery@gmail.com  /  carey-lau@foxmail.com
-#
+# Thomas Broggini  : broggini@med.uni-frankfurt.de
+# 
 # Unauthorized use will be considered a violation of intellectual property rights.
 # ============================================================================
 
