@@ -3,7 +3,7 @@ Spontaneous Intercellular Calcium Communication Networks in Melanoma cells Trigg
 
 Only for Doctoral Defense! Do not use this repo. Thank you for cooperation.
 
-# Code Upload Instructions
+# Project Instructions
 
 1. First, locate the code file `Main_Script_Liu_Xiao.m` and place it in the root directory.
 2. Create a subfolder named `function_module`, and download all other files into this subfolder.
@@ -13,11 +13,13 @@ Only for Doctoral Defense! Do not use this repo. Thank you for cooperation.
 4. If you have any questions, please contact Liu Xiao first:
    - Email: careyneurosurgery@gmail.com / carey-lau@foxmail.com
 
-Expected directory structure:
+## Directory Structure
 
+```text
 .
 ├── Main_Script_Liu_Xiao.m
 └── function_module/
     ├── mRNAwork.R
     ├── Liunx-fastq-STAR.txt
     └── ... (all other files)
+```
