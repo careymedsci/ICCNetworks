@@ -1,0 +1,28 @@
+{
+  "data_summary": {
+    "total_points": 374,
+    "unique_degrees": 9,
+    "min_degree": 1,
+    "max_degree": 9
+  },
+  "powerlaw_fit": {
+    "xmin_initial": 4,
+    "xmin_adjusted": 4,
+    "alpha_initial": 3.8472,
+    "alpha_adjusted": {},
+    "p_value_ks": 0,
+    "powerlaw_plausible": false
+  },
+  "comparison_tests": {
+    "poisson_lambda": 5.243,
+    "p_value_vs_poisson": [],
+    "powerlaw_better": []
+  },
+  "truncated_fit": {
+    "alpha": 0.5903,
+    "lambda": "NA",
+    "p_value_ks": 0.385,
+    "p_value_vs_powerlaw": [],
+    "trunc_better": []
+  }
+}

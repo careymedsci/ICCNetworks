@@ -1,0 +1,154 @@
+
+ 
+# ============================================================================
+# Copyright (c) 2025 Thomas Broggini and Liu Xiao. All rights reserved.
+#
+# This code was jointly written by:
+# Thomas Broggini (Frankfurt University, Germany)
+# Liu Xiao (Xiangyang First Hospital, China)
+#
+# The way how the mathematical models and methodologies implemented in this code have been
+# individually customized and are not intended for generic use. 
+#
+# For permission requests or inquiries, please contact:
+# Thomas Broggini  : broggini@med.uni-frankfurt.de
+# Liu Xiao         : careyneurosurgery@gmail.com  /  carey-lau@foxmail.com
+#
+# Unauthorized use will be considered a violation of intellectual property rights.
+# ============================================================================
+
+
+Since more than 93% of bases showed Phred quality scores above Q30, additional read quality trimming was not applied.
+step 1:  Install STAR aligner
+
+apt install rna-star
+
+#################################################################单机模式
+step 2: Reference genome: NCBI / mm39.109.gtf.gz
+
+STAR --runThreadN 16 --runMode genomeGenerate \
+     --genomeDir /genome/index \
+     --genomeFastaFiles /genome/mm39.fa \
+     --sjdbGTFfile /genome/vm36a.gtf \
+     --sjdbOverhang 100
+
+##################################################################
+
+ STAR --runThreadN 16 --runMode genomeGenerate \
+     --genomeDir /mnt/g/seq/index \
+     --genomeFastaFiles /mnt/g/seq/mm39.fa \
+     --sjdbGTFfile /mnt/g/seq/mm39.gtf \
+     --sjdbOverhang 100
+
+############################################################ 
+Carey code for multiple samples
+
+step 3 
+
+STAR --twopassMode Basic \
+     --quantMode TranscriptomeSAM GeneCounts \
+     --runThreadN 16 --genomeDir /mnt/g/seq/index \
+     --alignIntronMin 20 --alignIntronMax 50000 \
+     --outSAMtype BAM SortedByCoordinate  \
+     --sjdbOverhang 100 \
+     --outSAMattrRGline ID:sample SM:sample PL:ILLUMINA \
+     --outFilterMismatchNmax 2 --outSJfilterReads Unique \
+     --outSAMmultNmax 1 --outFileNamePrefix /mnt/g/seq/01_fastq/output/ \
+     --outSAMmapqUnique 60 --readFilesCommand gunzip -c \
+     --outSAMmode Full
+     --outReadsUnmapped Fastx
+     --readFilesIn  /mnt/g/seq/01_fastq/RNA_S13652Nr1.1.fastq.gz /mnt/g/seq/01_fastq/RNA_S13652Nr1.2.fastq.gz
+
+
+No strand-specific parameters (--strand) were specified in the STAR command, therefore the data were processed as unstranded RNA-seq libraries.
+
+For the STAR gene count output file (ReadsPerGene.out.tab), the second column corresponding to unstranded read counts was used for downstream analysis.
+
+
+step 4
+
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Mar  2 11:39:15 2025
+
+@author: Liu Xiao Thomas Broggini
+"""
+
+import os
+import csv
+
+output_directory = r"D:\OneDrive\PROJECT\Side Project\RNA-seq\bulky-rna-seq_2025-2-25_17-37-52\output_directory"
+
+if not os.path.exists(output_directory):
+    raise ValueError(f"❌ Error: Directory '{output_directory}' does not exist!")
+
+desired_column = 1
+sample_dict = {}
+sample_names = []
+
+for folder in os.listdir(output_directory):
+    if folder.lower().startswith("output"):
+        file_name = folder.replace("output", "", 1).strip()
+        if not file_name:
+            file_name = folder
+        sample_names.append(file_name)
+
+        gene_dict = {}
+        file_path = os.path.join(output_directory, folder, "ReadsPerGene.out.tab")
+
+        if not os.path.exists(file_path):
+            print(f"❌ Warning: File not found: {file_path}")
+            continue 
+
+
+        if os.path.getsize(file_path) == 0:
+            print(f"⚠️ Warning: Empty file {file_path}")
+            continue  # 跳过空文件
+
+        try:
+                        with open(file_path, "r", encoding="utf-8") as tabfile:
+                first_line = tabfile.readline().strip()
+                if not first_line:
+                    print(f"⚠️ Warning: Empty or invalid file {file_path}")
+                    continue
+
+
+            with open(file_path, "r", encoding="utf-8") as tabfile:
+                print(f"✅ Processing: {file_path}")
+                reader = csv.reader(tabfile, delimiter="\t")
+                for row in reader:
+                    if len(row) > desired_column:  # 避免 IndexError
+                        gene_dict[row[0]] = row[desired_column]
+
+            sample_dict[file_name] = gene_dict
+
+        except Exception as e:
+            print(f"❌ Error reading file {file_path}: {e}")
+
+
+if not sample_names:
+    raise ValueError("❌ Error: No valid samples found in the directory. Check 'output_directory'.")
+
+
+with open("raw_counts.csv", "wt") as counts_file, open("qc.csv", "wt") as qc_file:
+    counts_writer = csv.writer(counts_file)
+    qc_writer = csv.writer(qc_file)
+
+    counts_writer.writerow(['ensembl_id'] + [f"sample{sample}" for sample in sample_names])
+    qc_writer.writerow(['qc_metric'] + [f"sample{sample}" for sample in sample_names])
+
+    sorted_genes = sorted(list(sample_dict[sample_names[0]].keys()))
+
+    for gene in sorted_genes:
+        output = [gene]
+        for sample in sample_names:
+            output.append(sample_dict[sample][gene])
+        if gene.startswith("N_"):
+            qc_writer.writerow(output)
+        else:
+            counts_writer.writerow(output)
+
+print("🎉 QC and raw counts files have been successfully generated.")
+
+
+
