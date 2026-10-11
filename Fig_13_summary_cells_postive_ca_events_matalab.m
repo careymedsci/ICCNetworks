@@ -16,7 +16,7 @@
 % ============================================================================
 
 
-function Fig_2A_summary_cells_postive_ca_events_matalab()
+function Fig_13_summary_cells_postive_ca_events_matalab()
 
 % 作者：Thomas Broggini 和 刘晓；法兰克福大学医院；湖北医药学院襄阳市第一人民医院
 % By Thomas Broggini and Xiao Liu
