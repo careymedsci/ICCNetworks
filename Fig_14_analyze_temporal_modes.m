@@ -1,4 +1,4 @@
-function Fig_2B_analyze_temporal_modes()
+function Fig_14_analyze_temporal_modes()
 
 % ============================================================================
 % Copyright (c) 2025 Thomas Broggini and Liu Xiao. All rights reserved.
