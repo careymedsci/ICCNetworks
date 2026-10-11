@@ -1,25 +1,25 @@
  
 % ============================================================================
-% Copyright (c) 2025 Thomas Broggini and Liu Xiao. All rights reserved.
+% Copyright (c) 2025 Liu Xiao and Thomas Broggini. All rights reserved.
 %
 % This code was jointly written by:
-% Thomas Broggini (Frankfurt University, Germany)
 % Liu Xiao (Xiangyang First Hospital, China)
-%
+% Thomas Broggini (Frankfurt University, Germany)
+
 % The way how the mathematical models and methodologies implemented in this code have been
 % individually customized and are not intended for generic use. 
 %
 % For permission requests or inquiries, please contact:
-% Thomas Broggini  : broggini@med.uni-frankfurt.de
 % Liu Xiao         : careyneurosurgery@gmail.com  /  carey-lau@foxmail.com
-%
+% Thomas Broggini  : broggini@med.uni-frankfurt.de
+
 % Unauthorized use will be considered a violation of intellectual property rights.
 % ============================================================================
 
 
 
-% 作者：Thomas Broggini 和 刘晓； 法兰克福大学医院；湖北医药学院襄阳市第一人民医院
-% By Thomas Broggini (Supervisor) and Xiao Liu (MD Student)
+% 作者： 刘晓 和 Thomas Broggini
+% By Xiao Liu (MD Student) and Thomas Broggini (Supervisor)
 % Department of Neurosurgery
 % Neuroscience Centre
 % University Hospital Frankfurt
@@ -80,13 +80,13 @@ clc, clear all；
 result_one_anaylsis(im_data);
 
 
-%% ####################  Figure 2 Plotting  ############################### 
+%% ####################  Figure 13/14 Plotting  ############################### 
 
 
-% only for Figure 2A 
-Fig_2A_summary_cells_postive_ca_events_matalab()
-% only for Figure 2B
-Fig_2B_analyze_temporal_modes()
+% only for Figure 13 
+Fig_13_summary_cells_postive_ca_events_matalab()
+% only for Figure 14
+Fig_14_analyze_temporal_modes()
 
 
 %% ################## Figure 3: Global Charactors analysis  ###############   
@@ -99,8 +99,10 @@ calcium_fft_analysis();
 coherence_power_analysis();
 
 % Estimate significant coherence threshold (coherence error evaluation)； 
-% Any peak of the coherence below this value cannot be picked up (Fig. 3B)
-% 500 sims is the lowest requierment
+% Any peak of the coherence below this value cannot be picked up 
+% Fig. 15-18
+
+% 500 sims is the lowest requierment (Fig. 15A， purple line)
 coh_thresh = estimate_coherence_threshold(Vn, scores, tapers, Fs, nfft, ...
                                  f, findx, toplot.f_vector, 500, 0.05, 10);
 
@@ -260,24 +262,23 @@ load('all_for_3D_0.mat');
 %  save your necessary figures
 
 
-% Fig.14F (only sigle data for evaluation, different with plot_k_vs_sigma()) 
-% Fig.15A 
+% Fig.24A etc. 
 % set preset parameter xmin = 1 please;  
 load("all_for_analysis_0.mat")
 [params, analysis_summary] = plotPowerLawDistribution(params, analysis_summary);
 
 % degree distribution (use C matrix), they should have same relusts
-% Fig.15A (only sigle data for evaluation）
+% Fig.24AC etc.(only sigle data for evaluation）
 plotDegreeDistribution(params); 
 
-% Fig. 15B
+% Fig. 24B etc.
 % This is a code for scale free and small world test to 
 % all biological replicates and technical replicates
 % small world visualization
 % Before run codes below in this paragraph, please prepare all the data
 S = plotSmallWorldMetrics(); % different with small_word_test();
 
-% Fig. 14F
+% Fig. 24C etc.
 % Before run codes below in this paragraph, please prepare all the data
 % here we analysis by file '* _probability_distribution.txt'
 % ofcourse you can also use the I already precaculated directly
@@ -286,17 +287,17 @@ plot_k_vs_sigma();
 
 
 % ===================  step 11  network weankness analysis  =============
-% Fig. 16E and F
+% Fig. 27
 [params, analysis_summary] = weaknessNetwork(params, analysis_summary); 
 
 
 %% ###########################  layer analysis  ###########################
 
 % Note: Before run this, please prepare all the data
-% figure 16B， read Excel data file name: "summary_on_all_math_fit.xlsx"
+% figure 25B etc.， read Excel data file name: "summary_on_all_math_fit.xlsx"
 periodicity_ratio_Hub_vs_non_hub(); 
 
-% Fig.16H
+% Fig.26B etc.
 % different from "plot_freq_Min_Max_group_comparison()"
 [params, analysis_summary] = plotFrequencyHistogram(params, analysis_summary);
 
@@ -304,7 +305,7 @@ periodicity_ratio_Hub_vs_non_hub();
 % file name: summary_on_all_math_fit.xlsx
 exportMathFitToExcel();
 
-% Fig.16G
+% Fig.26A
 % read Excel data file name: "summary_on_all_math_fit.xlsx"
 % this file will be colloct later, do this code after all the data
 % processed
@@ -317,7 +318,7 @@ directionaryscatterWithErrorBars();
 % step 1 get cell mfft pifctures
 
 
-% figure 17
+% figure 28
 calcium_fft_analysis_combine();
 % load all results from correlation matrix
 load('all_verVisulization_0.mat');
@@ -340,17 +341,17 @@ params.testback = testback;
 
 
  analyze_frequency_distribution_mFFT();
- % Fig. 17C and D
+ % Fig. 29
  analyze_hub_power_distribution(toplot, params, x_coords, y_coords); 
- % Fig. 17H and I
+ % Fig. 30
  analyze_periodic_power_distribution(toplot, params, x_coords, y_coords);
- % Fig. 17E and F
+ % Fig. 30
 
 
  % step 3 summary
 
 
- % Figure 18A and B
+ % Figure 31
  % Check the direction of lines on correlation first
  % Please note that here all the figures will not save itself, please 
  % save your necessary figures
@@ -360,10 +361,11 @@ params.testback = testback;
  visualizeCorrelationsWithArrows(params);
 
  % plot the cells you want
- % Fig. 18C
+ % Fig. 31C
  plot_cell_traces(all_traces, 2);
 
- % plot the network layer
+ % plot the network layer 
+ % Fig. 32
  % read Excel data file name: "summary_on_all_math_fit.xlsx"
  layer_analysis();
 
@@ -371,17 +373,17 @@ params.testback = testback;
 %%  ################  treatments analysis and others  ##################### 
 
 
-% Fig. 19---  reagents treatment analysis 
+% reagents treatment analysis 
 % 300 frames comparation with baseline
 params = getAnalysisParameters();
 params = loadROIData(params);
 [params] = processPeaks(params);
 
-% 3D plots for control group; eg. Fig. 19B 
+% 3D plots for control group;  
 plot3DTraces_r(params);
-% 3D plots for treatment group； eg. Fig. 19C
+% 3D plots for treatment group；
 plot3DTraces_r_t(params);
-% for positive reagents ； eg. Fig. 19C
+% for positive reagents ； 
 plot3D_positive_reagents(params, savepath);
 % pick randomly traces for 3D plots to highlight the overall shape
 plot_csv_waveforms();
@@ -421,35 +423,35 @@ exportMathFitToExcel();
 
 % Comparsion results;
 % Statstical results name: treatment_comparison_stats.mat/xlsx
-% eg. Fig19D-L and N 
+% eg. 34 and 35 etc. 
 results_treatemnt_stats_ = drugTreatmentsub();
 
 % for B16-F10.n3; file name:co-culture_in_vivo_characteristics.xlsx
 peaks_and_coordinating(); 
 
 % file name: pharmacological investigation.xlsx
-% eg. Fig19M 
+% eg. Fig37A etc.
 % Statstical results name: freq_results_stats.mat or 
 % frequency statistical_results.xlsx
 results_freq_stats = plot_freq_Min_Max_group_comparison();
 
 % file name: pharmacological investigation.xlsx
-% eg. Fig19O and S
+% eg. Fig. 36C and F etc.
 plot_k_vs_sigma_drug();
 
 % file name: pharmacological investigation.xlsx
-% eg. Fig19R 
+% eg. Fig.36A ad D etc.
 small_word_test();
 
 % file name: pharmacological investigation.xlsx
-% eg. Fig19P and Q
+% eg. Fig. 37 etc
 periodicity_ratio_Hub_vs_non_hub_drug();
 
 %(mind the row and col)
 % co-cultrure and in vivo analysis
-% eg. Fig31
+% eg. Fig. 61
 % Statstical results name: KW_results.mat
 results1 = analyze_co_culture();
-% eg. Fig33; 40
+% eg. Fig.56
 % Statstical results name: KW_results.mat
 results2 = analyze_animal_part();
